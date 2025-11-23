@@ -134,9 +134,3 @@ LinkedIn: https://www.linkedin.com/in/nayan-kanaparthi/
 
 ---
 
-If you want, I can also generate:
-- A shorter README version  
-- A version formatted for arXiv style  
-- A GitHub badge banner  
-- A “How to navigate this paper” section for readers  
-Just tell me.
