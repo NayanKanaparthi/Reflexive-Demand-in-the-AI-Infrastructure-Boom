@@ -5,17 +5,18 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as
 // --- Components ---
 
 const FinancialTable = ({ title, headers, rows, note }) => (
-  <div className="w-full bg-zinc-900/50 rounded-xl border border-zinc-800 overflow-hidden mb-8">
-    <div className="p-4 border-b border-zinc-800 bg-zinc-900/80 flex items-center gap-2">
-      <TableIcon size={16} className="text-emerald-500" />
-      <h3 className="text-sm font-bold text-zinc-200 uppercase tracking-wider">{title}</h3>
+  <div className="w-full bg-zinc-900/50 rounded-xl border border-zinc-800 overflow-hidden mb-6 sm:mb-8">
+    <div className="p-3 sm:p-4 border-b border-zinc-800 bg-zinc-900/80 flex items-center gap-2">
+      <TableIcon size={16} className="text-emerald-500 flex-shrink-0" />
+      <h3 className="text-xs sm:text-sm font-bold text-zinc-200 uppercase tracking-wider">{title}</h3>
     </div>
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm text-left text-zinc-400">
+    <div className="overflow-x-auto -mx-4 sm:mx-0">
+      <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+        <table className="w-full text-xs sm:text-sm text-left text-zinc-400">
         <thead className="text-xs text-zinc-500 uppercase bg-zinc-900 border-b border-zinc-800">
           <tr>
             {headers.map((header, i) => (
-              <th key={i} className="px-6 py-3 font-medium tracking-wider whitespace-nowrap">
+                <th key={i} className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 font-medium tracking-wider whitespace-nowrap">
                 {header}
               </th>
             ))}
@@ -25,7 +26,7 @@ const FinancialTable = ({ title, headers, rows, note }) => (
           {rows.map((row, i) => (
             <tr key={i} className="bg-zinc-900/20 hover:bg-zinc-800/50 transition-colors">
               {row.map((cell, j) => (
-                <td key={j} className={`px-6 py-4 whitespace-nowrap ${j === 0 ? 'font-medium text-zinc-200' : ''}`}>
+                  <td key={j} className={`px-3 sm:px-4 md:px-6 py-3 sm:py-4 whitespace-nowrap ${j === 0 ? 'font-medium text-zinc-200' : ''}`}>
                   {cell}
                 </td>
               ))}
@@ -34,7 +35,8 @@ const FinancialTable = ({ title, headers, rows, note }) => (
         </tbody>
       </table>
     </div>
-    {note && <div className="p-3 text-xs text-zinc-500 bg-zinc-900/30 border-t border-zinc-800 italic">{note}</div>}
+    </div>
+    {note && <div className="p-2 sm:p-3 text-xs text-zinc-500 bg-zinc-900/30 border-t border-zinc-800 italic">{note}</div>}
   </div>
 );
 
@@ -498,17 +500,17 @@ const Navigation = ({ activeSection, scrollToSection, isOpen, setIsOpen }) => {
   };
 
   return (
-    <div className={`fixed top-0 right-0 h-full z-50 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} md:translate-x-0 md:w-72 md:border-l md:border-zinc-800 bg-zinc-950/98 backdrop-blur-md`}>
+    <div 
+      data-nav
+      className={`fixed top-0 right-0 h-full z-50 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} w-72 border-l border-zinc-800 bg-zinc-950/98 backdrop-blur-md`}
+    >
       <div className="p-5 flex flex-col h-full">
-        <div className="flex justify-between items-center mb-5 md:hidden">
+        <div className="flex justify-between items-center mb-5 pb-3 border-b border-zinc-800">
           <span className="text-emerald-500 uppercase tracking-widest text-xs font-bold">Contents</span>
-          <button onClick={() => setIsOpen(false)} className="text-zinc-400 hover:text-white transition-colors">
+          <button onClick={() => setIsOpen(false)} className="text-zinc-400 hover:text-white transition-colors" aria-label="Close navigation">
             <X size={20} />
-          </button>
-        </div>
-        <div className="hidden md:block mb-5 pb-3 border-b border-zinc-800">
-          <span className="text-emerald-500 uppercase tracking-widest text-xs font-bold">Contents</span>
-        </div>
+        </button>
+      </div>
         
         <nav className="flex-1 overflow-y-auto pr-1 space-y-0.5 scrollbar-hide">
           {sections.map((section, index) => {
@@ -517,61 +519,61 @@ const Navigation = ({ activeSection, scrollToSection, isOpen, setIsOpen }) => {
             const isActive = activeSection === section.id;
             
             return (
-              <button
-                key={section.id}
-                onClick={() => {
-                  scrollToSection(section.id);
-                  setIsOpen(false);
-                }}
+          <button
+            key={section.id}
+            onClick={() => {
+              scrollToSection(section.id);
+              setIsOpen(false);
+            }}
                 className={`w-full text-left py-2 px-3 rounded transition-all duration-200 ${
                   isSub 
                     ? `ml-5 pl-3 border-l border-zinc-800 text-xs leading-relaxed ${isActive ? 'text-emerald-300 bg-emerald-900/15 border-l-emerald-500' : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/50'}`
                     : isMain
                     ? `font-medium text-sm leading-relaxed ${isActive ? 'text-emerald-400 bg-emerald-900/20 border-l-2 border-emerald-500 pl-2.5' : 'text-zinc-300 hover:text-zinc-100 hover:bg-zinc-900/50'}`
                     : `text-sm leading-relaxed ${isActive ? 'text-emerald-400 bg-emerald-900/20 border-l-2 border-emerald-500 pl-2.5' : 'text-zinc-400 hover:text-zinc-300 hover:bg-zinc-900/50'}`
-                }`}
-              >
-                {section.title}
-              </button>
+            }`}
+          >
+            {section.title}
+          </button>
             );
           })}
-        </nav>
-      </div>
+      </nav>
     </div>
-  );
+  </div>
+);
 };
 
 const Hero = ({ content }) => (
-  <div className="min-h-screen flex flex-col justify-center items-center px-6 md:px-12 lg:px-16 max-w-5xl relative mx-auto">
-    <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-zinc-100 mb-6 leading-tight text-center w-full">
+  <div className="min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 md:px-12 lg:px-16 max-w-5xl relative mx-auto py-12 md:py-16">
+    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-bold text-zinc-100 mb-4 sm:mb-6 leading-tight text-center w-full">
       {content.title}
     </h1>
-    <h2 className="text-xl md:text-2xl text-zinc-400 font-light mb-8 leading-relaxed text-center w-full">
+    <h2 className="text-lg sm:text-xl md:text-2xl text-zinc-400 font-light mb-6 sm:mb-8 leading-relaxed text-center w-full px-2">
       {content.subtitle}
     </h2>
-    <div className="flex flex-col md:flex-row gap-8 mb-12 w-full justify-center items-center">
-      <div className="text-center md:text-left">
+    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 w-full justify-center items-center">
+      <div className="text-center sm:text-left">
         <p className="text-xs uppercase tracking-wider text-zinc-500 mb-1">Author</p>
-        <p className="text-zinc-200 font-medium">{content.author}</p>
+        <p className="text-sm sm:text-base text-zinc-200 font-medium">{content.author}</p>
       </div>
-      <div className="text-center md:text-left">
+      <div className="text-center sm:text-left">
         <p className="text-xs uppercase tracking-wider text-zinc-500 mb-1">Affiliation</p>
-        <p className="text-zinc-400">{content.affiliation}</p>
+        <p className="text-sm sm:text-base text-zinc-400">{content.affiliation}</p>
       </div>
       {content.email && (
-        <div className="text-center md:text-left">
+        <div className="text-center sm:text-left">
           <p className="text-xs uppercase tracking-wider text-zinc-500 mb-1">Email</p>
-          <p className="text-zinc-400">{content.email}</p>
-        </div>
+          <p className="text-sm sm:text-base text-zinc-400 break-all">{content.email}</p>
+      </div>
       )}
     </div>
-    <div className="bg-zinc-900/50 p-6 rounded-lg border border-zinc-800 backdrop-blur-sm w-full">
-      <p className="text-zinc-300 leading-relaxed font-serif italic text-lg text-justify">
+    <div className="bg-zinc-900/50 p-4 sm:p-6 rounded-lg border border-zinc-800 backdrop-blur-sm w-full">
+      <p className="text-sm sm:text-base md:text-lg text-zinc-300 leading-relaxed font-serif italic text-justify">
         {content.abstract}
       </p>
     </div>
-    <div className="animate-bounce absolute bottom-10 left-1/2 transform -translate-x-1/2 md:left-24 md:transform-none">
-      <ChevronDown className="text-zinc-600" size={32} />
+    <div className="animate-bounce absolute bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2">
+      <ChevronDown className="text-zinc-600" size={24} />
     </div>
   </div>
 );
@@ -588,7 +590,7 @@ const TextSection = ({ title, content }) => {
       if (trimmed.startsWith('**') && trimmed.endsWith('**')) {
         const headerText = trimmed.slice(2, -2);
         elements.push(
-          <h3 key={idx} className="text-xl md:text-2xl font-bold text-white mt-6 mb-3 pt-4 border-t border-zinc-800 first:border-t-0 first:pt-0">
+          <h3 key={idx} className="text-lg sm:text-xl md:text-2xl font-bold text-white mt-4 sm:mt-6 mb-3 pt-4 border-t border-zinc-800 first:border-t-0 first:pt-0">
             {headerText}
           </h3>
         );
@@ -604,13 +606,13 @@ const TextSection = ({ title, content }) => {
           const label = parts[0].slice(2);
           const value = parts.slice(1).join(':**');
           elements.push(
-            <li key={idx} className="mb-2 text-zinc-300 leading-relaxed">
+            <li key={idx} className="mb-2 text-sm sm:text-base text-zinc-300 leading-relaxed">
               <span className="font-semibold text-zinc-200">{label}:</span> {value}
             </li>
           );
         } else {
           elements.push(
-            <li key={idx} className="mb-2 text-zinc-300 leading-relaxed ml-4 list-disc">
+            <li key={idx} className="mb-2 text-sm sm:text-base text-zinc-300 leading-relaxed ml-4 list-disc">
               {bulletText}
             </li>
           );
@@ -622,9 +624,9 @@ const TextSection = ({ title, content }) => {
       if (/^\d+\./.test(trimmed)) {
         const listText = trimmed.replace(/^\d+\.\s*/, '');
         elements.push(
-          <li key={idx} className="mb-2 text-zinc-300 leading-relaxed ml-4 list-decimal">
-            {listText}
-          </li>
+            <li key={idx} className="mb-2 text-sm sm:text-base text-zinc-300 leading-relaxed ml-4 list-decimal">
+              {listText}
+            </li>
         );
         return;
       }
@@ -633,13 +635,13 @@ const TextSection = ({ title, content }) => {
       if (trimmed.startsWith('*') && trimmed.includes('*') && trimmed.indexOf('*') !== trimmed.lastIndexOf('*')) {
         const parts = trimmed.split('*');
           elements.push(
-            <p key={idx} className="mb-4 text-zinc-300 leading-relaxed font-serif text-lg md:text-xl text-justify">
-              {parts.map((part, i) => {
+            <p key={idx} className="mb-4 text-zinc-300 leading-relaxed font-serif text-base sm:text-lg md:text-xl text-justify">
+        {parts.map((part, i) => {
                 if (i % 2 === 1) {
                   return <em key={i} className="text-zinc-200 font-semibold not-italic">{part}</em>;
-                }
-                return part;
-              })}
+          }
+          return part;
+        })}
             </p>
           );
         return;
@@ -649,7 +651,7 @@ const TextSection = ({ title, content }) => {
       if (trimmed.startsWith('•')) {
         const refText = trimmed.substring(1).trim();
         elements.push(
-          <p key={idx} className="mb-2 text-zinc-400 leading-relaxed font-serif text-base md:text-lg ml-4">
+          <p key={idx} className="mb-2 text-zinc-400 leading-relaxed font-serif text-sm sm:text-base md:text-lg ml-2 sm:ml-4">
             • {refText}
           </p>
         );
@@ -658,20 +660,20 @@ const TextSection = ({ title, content }) => {
       
       // Regular paragraph
       elements.push(
-        <p key={idx} className="mb-4 text-zinc-300 leading-relaxed font-serif text-lg md:text-xl text-justify">
+        <p key={idx} className="mb-4 text-zinc-300 leading-relaxed font-serif text-base sm:text-lg md:text-xl text-justify">
           {trimmed}
-        </p>
-      );
-    });
+      </p>
+    );
+  });
     
     return elements;
   };
 
   return (
-    <div className="flex flex-col justify-center items-center px-6 md:px-12 lg:px-16 py-12 md:py-16 max-w-5xl mx-auto">
-      <h2 className="text-3xl md:text-4xl font-bold text-zinc-100 mb-8 flex items-center gap-4 w-full">
-        <span className="w-12 h-1 bg-emerald-500 block"></span>
-        {title}
+    <div className="flex flex-col justify-center items-center px-4 sm:px-6 md:px-12 lg:px-16 py-8 sm:py-12 md:py-16 max-w-5xl mx-auto">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-100 mb-6 sm:mb-8 flex items-center gap-3 sm:gap-4 w-full">
+        <span className="w-8 sm:w-12 h-1 bg-emerald-500 block"></span>
+        <span className="break-words">{title}</span>
       </h2>
       <div className="prose prose-invert max-w-none w-full text-justify">
         {formatContent(content)}
@@ -681,17 +683,17 @@ const TextSection = ({ title, content }) => {
 };
 
 const SectionWrapper = ({ children, title, description }) => (
-  <div className="flex flex-col justify-center items-center px-6 md:px-12 lg:px-16 py-12 md:py-16 max-w-5xl mx-auto">
-    <h2 className="text-3xl md:text-4xl font-bold text-zinc-100 mb-4 flex items-center gap-4 w-full">
-      <span className="w-12 h-1 bg-emerald-500 block"></span>
-      {title}
+  <div className="flex flex-col justify-center items-center px-4 sm:px-6 md:px-12 lg:px-16 py-8 sm:py-12 md:py-16 max-w-5xl mx-auto">
+    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-100 mb-4 sm:mb-6 flex items-center gap-3 sm:gap-4 w-full">
+      <span className="w-8 sm:w-12 h-1 bg-emerald-500 block flex-shrink-0"></span>
+      <span className="break-words">{title}</span>
     </h2>
     {description && (
-      <p className="text-zinc-400 mb-8 max-w-3xl text-lg leading-relaxed text-center">
+      <p className="text-sm sm:text-base md:text-lg text-zinc-400 mb-6 sm:mb-8 max-w-3xl leading-relaxed text-center px-2">
         {description}
       </p>
     )}
-    <div className="w-full">
+    <div className="w-full overflow-x-auto">
       {children}
     </div>
   </div>
@@ -709,22 +711,22 @@ const CapexChart = () => (
       note="Source: Company Filings. Ratio > 1.0 indicates CapEx exceeds Operating Cash Flow."
     />
 
-    <div className="h-[450px] w-full bg-zinc-900/50 p-6 rounded-xl border border-zinc-800 mt-8">
+    <div className="h-[300px] sm:h-[400px] md:h-[450px] w-full bg-zinc-900/50 p-3 sm:p-4 md:p-6 rounded-xl border border-zinc-800 mt-6 sm:mt-8">
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={capexData}>
+        <LineChart data={capexData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" vertical={false} />
-          <XAxis dataKey="year" stroke="#71717a" tick={{ fill: '#71717a' }} />
-          <YAxis stroke="#71717a" tick={{ fill: '#71717a' }} label={{ value: 'CapEx / OCF Ratio', angle: -90, position: 'insideLeft', fill: '#71717a' }} />
+          <XAxis dataKey="year" stroke="#71717a" tick={{ fill: '#71717a', fontSize: 12 }} />
+          <YAxis stroke="#71717a" tick={{ fill: '#71717a', fontSize: 12 }} label={{ value: 'CapEx / OCF Ratio', angle: -90, position: 'insideLeft', fill: '#71717a', style: { fontSize: '12px' } }} />
           <RechartsTooltip 
-            contentStyle={{ backgroundColor: '#18181b', border: '1px solid #3f3f46', color: '#fff', borderRadius: '8px' }}
-            itemStyle={{ color: '#fff' }}
+            contentStyle={{ backgroundColor: '#18181b', border: '1px solid #3f3f46', color: '#fff', borderRadius: '8px', fontSize: '12px' }}
+            itemStyle={{ color: '#fff', fontSize: '12px' }}
           />
-          <Legend wrapperStyle={{ paddingTop: '20px', color: '#a1a1aa' }} />
-          <Line type="monotone" dataKey="Oracle" stroke="#10b981" strokeWidth={3} dot={{ r: 6 }} activeDot={{ r: 8 }} />
-          <Line type="monotone" dataKey="Microsoft" stroke="#3b82f6" strokeWidth={2} dot={{ r: 5 }} />
-          <Line type="monotone" dataKey="Google" stroke="#ef4444" strokeWidth={2} dot={{ r: 5 }} />
-          <Line type="monotone" dataKey="Amazon" stroke="#f59e0b" strokeWidth={2} strokeDasharray="5 5" dot={{ r: 5 }} />
-          <Line type="monotone" dataKey="Nvidia" stroke="#a855f7" strokeWidth={2} dot={{ r: 5 }} />
+          <Legend wrapperStyle={{ paddingTop: '10px', color: '#a1a1aa', fontSize: '12px' }} />
+          <Line type="monotone" dataKey="Oracle" stroke="#10b981" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+          <Line type="monotone" dataKey="Microsoft" stroke="#3b82f6" strokeWidth={2} dot={{ r: 4 }} />
+          <Line type="monotone" dataKey="Google" stroke="#ef4444" strokeWidth={2} dot={{ r: 4 }} />
+          <Line type="monotone" dataKey="Amazon" stroke="#f59e0b" strokeWidth={2} strokeDasharray="5 5" dot={{ r: 4 }} />
+          <Line type="monotone" dataKey="Nvidia" stroke="#a855f7" strokeWidth={2} dot={{ r: 4 }} />
         </LineChart>
       </ResponsiveContainer>
     </div>
@@ -743,17 +745,17 @@ const RpoChart = () => (
       note="Source: Company Filings. RPO/Rev Multiple indicates years of backlog relative to current revenue."
     />
 
-    <div className="h-[450px] w-full bg-zinc-900/50 p-6 rounded-xl border border-zinc-800 mt-8">
+    <div className="h-[300px] sm:h-[400px] md:h-[450px] w-full bg-zinc-900/50 p-3 sm:p-4 md:p-6 rounded-xl border border-zinc-800 mt-6 sm:mt-8">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={rpoData} layout="vertical" margin={{ left: 20, right: 20 }}>
+        <BarChart data={rpoData} layout="vertical" margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" horizontal={false} />
-          <XAxis type="number" stroke="#71717a" domain={[0, 9]} tick={{ fill: '#71717a' }} />
-          <YAxis dataKey="name" type="category" stroke="#e4e4e7" width={100} tick={{ fill: '#e4e4e7' }} />
+          <XAxis type="number" stroke="#71717a" domain={[0, 9]} tick={{ fill: '#71717a', fontSize: 12 }} />
+          <YAxis dataKey="name" type="category" stroke="#e4e4e7" width={80} tick={{ fill: '#e4e4e7', fontSize: 12 }} />
           <RechartsTooltip 
             cursor={{fill: 'rgba(255, 255, 255, 0.05)'}}
-            contentStyle={{ backgroundColor: '#18181b', border: '1px solid #3f3f46', color: '#fff', borderRadius: '8px' }}
+            contentStyle={{ backgroundColor: '#18181b', border: '1px solid #3f3f46', color: '#fff', borderRadius: '8px', fontSize: '12px' }}
           />
-          <Legend wrapperStyle={{ paddingTop: '20px', color: '#a1a1aa' }} />
+          <Legend wrapperStyle={{ paddingTop: '10px', color: '#a1a1aa', fontSize: '12px' }} />
           <Bar dataKey="multiple" name="Backlog Multiple (RPO/Rev)" fill="#3f3f46" radius={[0, 4, 4, 0]}>
             {rpoData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.name === 'Oracle' ? '#10b981' : '#3f3f46'} />
@@ -777,16 +779,16 @@ const DebtChart = () => (
       note="Source: Bloomberg Bond Issuance Data. Net Debt Change reflects new issuance less repayments."
     />
 
-    <div className="h-[450px] w-full bg-zinc-900/50 p-6 rounded-xl border border-zinc-800 mt-8">
+    <div className="h-[300px] sm:h-[400px] md:h-[450px] w-full bg-zinc-900/50 p-3 sm:p-4 md:p-6 rounded-xl border border-zinc-800 mt-6 sm:mt-8">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={debtData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+        <BarChart data={debtData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" vertical={false} />
-          <XAxis dataKey="name" stroke="#71717a" tick={{ fill: '#71717a' }} />
-          <YAxis stroke="#71717a" tick={{ fill: '#71717a' }} label={{ value: 'Billions ($)', angle: -90, position: 'insideLeft', fill: '#71717a' }} />
+          <XAxis dataKey="name" stroke="#71717a" tick={{ fill: '#71717a', fontSize: 12 }} />
+          <YAxis stroke="#71717a" tick={{ fill: '#71717a', fontSize: 12 }} label={{ value: 'Billions ($)', angle: -90, position: 'insideLeft', fill: '#71717a', style: { fontSize: '12px' } }} />
           <RechartsTooltip 
-            contentStyle={{ backgroundColor: '#18181b', border: '1px solid #3f3f46', color: '#fff', borderRadius: '8px' }}
+            contentStyle={{ backgroundColor: '#18181b', border: '1px solid #3f3f46', color: '#fff', borderRadius: '8px', fontSize: '12px' }}
           />
-          <Legend wrapperStyle={{ paddingTop: '20px', color: '#a1a1aa' }} />
+          <Legend wrapperStyle={{ paddingTop: '10px', color: '#a1a1aa', fontSize: '12px' }} />
           <Bar dataKey="total" name="Total Issuance ($B)" fill="#ef4444" radius={[4, 4, 0, 0]}>
             {debtData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.name === 'Oracle' ? '#ef4444' : '#3f3f46'} />
@@ -800,28 +802,28 @@ const DebtChart = () => (
 
 const ReflexiveNetwork = () => {
   return (
-    <div className="flex flex-col justify-center items-center px-6 md:px-12 lg:px-16 py-12 md:py-16 max-w-5xl mx-auto">
-      <h2 className="text-3xl md:text-4xl font-bold text-zinc-100 mb-4 flex items-center gap-4 w-full">
-        <span className="w-12 h-1 bg-emerald-500 block"></span>
-        Figure 1. Interconnected Vendor Financing and Service Relationships Among Major AI Firms (Bloomberg, 2025)
+    <div className="flex flex-col justify-center items-center px-4 sm:px-6 md:px-12 lg:px-16 py-8 sm:py-12 md:py-16 max-w-5xl mx-auto">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-100 mb-4 sm:mb-6 flex items-center gap-3 sm:gap-4 w-full">
+        <span className="w-8 sm:w-12 h-1 bg-emerald-500 block flex-shrink-0"></span>
+        <span className="break-words">Figure 1. Interconnected Vendor Financing and Service Relationships Among Major AI Firms (Bloomberg, 2025)</span>
       </h2>
-      <p className="text-zinc-400 mb-8 max-w-3xl text-lg leading-relaxed text-center">
+      <p className="text-sm sm:text-base md:text-lg text-zinc-400 mb-6 sm:mb-8 max-w-3xl leading-relaxed text-center px-2">
         Network mapping of interconnected vendor financing and service relationships among major AI firms. This visualization illustrates how Nvidia, Oracle, OpenAI, Microsoft, and AMD are linked through investments, hardware/software agreements, services, and venture capital arrangements (Source: Bloomberg, 2025).
       </p>
 
-      <div className="relative w-full min-h-[500px] bg-zinc-900/50 rounded-xl border-2 border-zinc-800 overflow-hidden flex items-center justify-center p-8 group hover:border-emerald-500/50 transition-colors duration-300">
+      <div className="relative w-full min-h-[300px] sm:min-h-[400px] md:min-h-[500px] bg-zinc-900/50 rounded-xl border-2 border-zinc-800 overflow-hidden flex items-center justify-center p-4 sm:p-6 md:p-8 group hover:border-emerald-500/50 transition-colors duration-300">
         <img 
           src="/network-diagram.webp" 
           alt="Bloomberg Network Map of Vendor Financing - Network diagram showing relationships between OpenAI, Nvidia, Microsoft, Oracle, AMD, and other AI companies through investments, hardware/software, services, and venture capital" 
-          className="w-full h-auto object-contain rounded-lg shadow-2xl max-h-[75vh] transition-transform duration-300 group-hover:scale-[1.02]"
+          className="w-full h-auto object-contain rounded-lg shadow-2xl max-h-[60vh] sm:max-h-[70vh] md:max-h-[75vh] transition-transform duration-300 group-hover:scale-[1.02]"
           onError={(e) => {
             e.target.onerror = null; 
             e.target.src = "https://placehold.co/1200x800/18181b/52525b?text=Network+Diagram+Image+Placeholder";
           }}
         />
         
-        <div className="absolute bottom-4 right-4 bg-zinc-900/90 backdrop-blur-sm px-4 py-2 rounded-lg border border-zinc-800">
-          <p className="text-xs text-zinc-400 uppercase tracking-wider font-semibold">
+        <div className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 bg-zinc-900/90 backdrop-blur-sm px-2 sm:px-4 py-1 sm:py-2 rounded-lg border border-zinc-800">
+          <p className="text-[10px] sm:text-xs text-zinc-400 uppercase tracking-wider font-semibold">
             Source: Bloomberg News (2025)
           </p>
         </div>
@@ -856,18 +858,35 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close menu when clicking outside on mobile
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMenuOpen && window.innerWidth < 768) {
+        const nav = document.querySelector('[data-nav]');
+        const button = document.querySelector('[data-menu-button]');
+        if (nav && !nav.contains(event.target) && !button?.contains(event.target)) {
+          setIsMenuOpen(false);
+        }
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMenuOpen]);
+
   return (
     <div className="bg-zinc-950 min-h-screen text-zinc-200 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 overflow-x-hidden">
       
       <button 
-        onClick={() => setIsMenuOpen(true)}
-        className="fixed top-4 right-4 z-50 p-2 bg-zinc-900 rounded-full border border-zinc-800 md:hidden text-zinc-400 hover:text-white transition-colors"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        data-menu-button
+        className={`fixed top-4 z-50 p-2 bg-zinc-900 rounded-full border border-zinc-800 text-zinc-400 hover:text-white transition-all duration-300 ${isMenuOpen ? 'right-[19rem]' : 'right-4'}`}
+        aria-label="Toggle navigation menu"
       >
-        <Menu size={24} />
+        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
       <div className="flex">
-        <main className="flex-1 md:mr-72 w-full">
+        <main className={`flex-1 w-full transition-all duration-300 ${isMenuOpen ? 'md:mr-72' : ''}`}>
           {sections.map((section) => (
             <div key={section.id} id={section.id} className="border-b border-zinc-900/50 last:border-0 min-h-0">
               {section.type === 'cover' && <Hero content={section.content} />}
@@ -879,7 +898,7 @@ export default function App() {
             </div>
           ))}
           
-          <div className="py-24 px-6 text-center border-t border-zinc-900 text-zinc-600">
+          <div className="py-12 md:py-16 px-6 text-center border-t border-zinc-900 text-zinc-600">
             <p className="text-zinc-500">Paper by Nayan Kanaparthi</p>
           </div>
         </main>
